@@ -1,0 +1,11 @@
+{% extends "app.html" %}
+{% block titolo %}{{ titolo }} – Registro vendite{% endblock %}
+{% block contenuto %}
+<div class="tabella">
+  <div class="vuoto">
+    <h2>{{ titolo }}</h2>
+    <p>{{ testo }}</p>
+    <a class="btn btn-primario" href="{{ url_for('dashboard') }}">Torna alle vendite</a>
+  </div>
+</div>
+{% endblock %}

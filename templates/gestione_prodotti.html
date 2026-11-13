@@ -1,0 +1,44 @@
+{% extends "gestione.html" %}
+{% block titolo %}Gestione prodotti – Registro vendite{% endblock %}
+{% block sezione %}
+<div class="testata-sezione">
+  <h2>Prodotti ({{ righe|length }})</h2>
+  <a class="btn btn-primario" href="{{ url_for('prodotto_salva') }}">Nuovo prodotto</a>
+</div>
+<div class="tabella scorri">
+  {% if righe %}
+  <table>
+    <thead><tr>
+      <th scope="col">Prodotto</th><th scope="col">Categorie</th>
+      <th scope="col" class="num">Vendite</th><th scope="col"><span class="visually-hidden">Azioni</span></th>
+    </tr></thead>
+    <tbody>
+      {% for r in righe %}
+      <tr>
+        <td>
+          <div class="prodotto-cella">
+            {% if r.ha_immagine %}
+              <img class="miniatura" src="{{ url_for('prodotto_immagine', id=r.id) }}" alt="" loading="lazy" width="42" height="42">
+            {% else %}
+              <span class="miniatura miniatura-vuota" aria-hidden="true">–</span>
+            {% endif %}
+            <span>{{ r.nome }}</span>
+          </div>
+        </td>
+        <td>{{ r.categorie or '–' }}</td>
+        <td class="num">{{ r.n_vendite }}</td>
+        <td class="azioni">
+          <a class="btn btn-tenue btn-piccolo" href="{{ url_for('prodotto_salva', id=r.id) }}">Modifica</a>
+          <form class="in-linea" method="POST" action="{{ url_for('prodotto_elimina', id=r.id) }}" data-conferma="Eliminare il prodotto {{ r.nome }}?">
+            <button class="btn btn-pericolo btn-piccolo">Elimina</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="vuoto"><h2>Nessun prodotto</h2><p>Aggiungi il primo prodotto.</p></div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block titolo %}Accedi – Registro vendite{% endblock %}
+{% block corpo %}
+<div class="accesso">
+  <section class="vetrina">
+    <a class="marchio" href="{{ url_for('login_page') }}">
+      <svg viewBox="0 0 26 26" aria-hidden="true">
+        <rect x="2" y="13" width="6" height="11" rx="2" fill="currentColor" opacity=".35"/>
+        <rect x="10" y="7" width="6" height="17" rx="2" fill="currentColor" opacity=".6"/>
+        <rect x="18" y="2" width="6" height="22" rx="2" fill="var(--accento)"/>
+      </svg>
+      Registro vendite
+    </a>
+    <div>
+      <h1>Ogni vendita, a portata di ricerca.</h1>
+      <p>Consulta l'elenco, filtra per cliente, prodotto, categoria, data o prezzo. I gestori aggiornano i dati.</p>
+    </div>
+    <div class="colonne" aria-hidden="true">
+      {% for h in [28, 42, 35, 58, 48, 72, 55, 88, 66, 100] %}
+        <span class="barra{{ ' max' if h == 100 }}" style="--h: {{ h }}%; --i: {{ loop.index0 }}"></span>
+      {% endfor %}
+    </div>
+  </section>
+
+  <main class="pannello-accesso">
+    <div class="accesso-box">
+      <h2>Accedi</h2>
+      <p class="sottotitolo">Inserisci email e password del tuo account.</p>
+
+      {% for categoria, messaggio in get_flashed_messages(with_categories=true) %}
+        <div class="avviso {{ 'ok' if categoria == 'ok' }}" role="status">{{ messaggio }}</div>
+      {% endfor %}
+
+      <div id="errore" class="avviso" role="alert" hidden>
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <circle cx="10" cy="10" r="8"/><path d="M10 6v5"/><circle cx="10" cy="14" r=".6" fill="currentColor"/>
+        </svg>
+        <span id="testo-errore"></span>
+      </div>
+
+      <form id="login-form" data-url="{{ url_for('login') }}" autocomplete="off">
+        <div class="campo">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="off" required autofocus>
+        </div>
+        <div class="campo">
+          <label for="password">Password</label>
+          <div class="con-azione">
+            <input type="password" id="password" name="password" autocomplete="new-password" required>
+            <button type="button" class="mostra" id="mostra" aria-pressed="false">Mostra</button>
+          </div>
+        </div>
+        <button type="submit" id="accedi" class="btn btn-primario btn-pieno">Accedi</button>
+      </form>
+      <p class="alternativa"><a href="{{ url_for('password_dimenticata') }}">Password dimenticata?</a></p>
+      <p class="alternativa">Non hai un account? <a href="{{ url_for('registrazione') }}">Registrati</a></p>
+    </div>
+  </main>
+</div>
+{% endblock %}

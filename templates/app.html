@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block corpo %}
+<a class="salta" href="#contenuto">Vai al contenuto</a>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="marchio" href="{{ url_for('dashboard') }}">
+      <img src="{{ url_for('static', filename='logo.svg') }}" alt="" width="26" height="26">
+      Registro vendite
+    </a>
+    <nav class="nav" aria-label="Principale">
+      {% if utente %}
+        <a class="nav-link" href="{{ url_for('dashboard') }}"{% if pagina == 'dashboard' %} aria-current="page"{% endif %}>Vendite</a>
+        {% if utente.ruolo == 'gestore' %}
+          <a class="nav-link" href="{{ url_for('gestione') }}"{% if (pagina or '')[:9] == 'gestione-' %} aria-current="page"{% endif %}>Gestione</a>
+        {% endif %}
+        <span class="nav-utente">{{ utente.nome }} <span class="badge {{ utente.ruolo }}">{{ utente.ruolo }}</span></span>
+        <form action="{{ url_for('logout') }}" method="POST">
+          <button type="submit" class="nav-link">Esci</button>
+        </form>
+      {% else %}
+        <a class="nav-link" href="{{ url_for('login_page') }}">Accedi</a>
+        <a class="nav-link" href="{{ url_for('registrazione') }}"{% if pagina == 'registrazione' %} aria-current="page"{% endif %}>Registrati</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+<main id="contenuto" class="pagina">
+  {% for categoria, messaggio in get_flashed_messages(with_categories=true) %}
+    <div class="avviso {{ 'ok' if categoria == 'ok' }}" role="status">{{ messaggio }}</div>
+  {% endfor %}
+  {% block contenuto %}{% endblock %}
+</main>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "app.html" %}
+{% block titolo %}Controlla la tua email – Registro vendite{% endblock %}
+{% block contenuto %}
+<section class="scheda-form">
+  {% if inviata %}
+    <h1>Controlla la tua email</h1>
+    <p class="sottotitolo">Abbiamo inviato un link di conferma a <strong>{{ email }}</strong>. Aprilo entro un'ora per attivare l'account, poi potrai accedere.</p>
+    <p class="nota">Non lo trovi? Controlla anche nello spam.</p>
+  {% else %}
+    <h1>Account creato, ma la mail non è partita</h1>
+    <p class="sottotitolo">Non siamo riusciti a inviare il link di conferma a <strong>{{ email }}</strong>. L'account resta disattivato finché non viene confermato: riprova più tardi o contatta un gestore.</p>
+    {% if link %}
+      <div class="avviso" role="status">
+        <div>
+          <strong>Modalità sviluppo</strong>
+          <p>Apri questo link per attivare l'account:</p>
+          <code><a href="{{ link }}">{{ link }}</a></code>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+  <div class="azioni-form">
+    <a class="btn btn-primario" href="{{ url_for('login_page') }}">Vai al login</a>
+  </div>
+</section>
+{% endblock %}

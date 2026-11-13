@@ -1,0 +1,96 @@
+{% extends "app.html" %}
+{% block titolo %}Vendite – Registro vendite{% endblock %}
+{% block contenuto %}
+<section class="sintesi">
+  <div>
+    <h1>Vendite</h1>
+    <p class="didascalia">{{ 'Incasso dei risultati mostrati' if q else 'Incasso totale' }}</p>
+    <p class="cifra">{{ s.intero }}<small>,{{ s.decimali }} €</small></p>
+    <dl class="dati-rapidi">
+      <div><dt>Vendite</dt><dd>{{ s.numero }}</dd></div>
+      <div><dt>Media per vendita</dt><dd>{{ s.media }}</dd></div>
+      <div><dt>Vendita più alta</dt><dd>{{ s.massimo }}</dd></div>
+    </dl>
+  </div>
+
+  <figure class="grafico">
+    <figcaption>Prezzo di ogni vendita, in ordine di data</figcaption>
+    {% if s.barre %}
+      <div class="barre" role="img"
+           aria-label="Grafico a barre del prezzo di ogni vendita, dal {{ s.data_inizio }} al {{ s.data_fine }}">
+        {% for b in s.barre %}
+          <span class="barra{{ ' max' if b.max }}" style="--h: {{ b.altezza }}%; --i: {{ loop.index0 }}" title="{{ b.titolo }}"></span>
+        {% endfor %}
+      </div>
+      <div class="asse"><span>{{ s.data_inizio }}</span><span>{{ s.data_fine }}</span></div>
+    {% else %}
+      <p class="grafico-vuoto">Nessun dato da mostrare.</p>
+    {% endif %}
+  </figure>
+</section>
+
+<!-- Barra di ricerca: mentre scrivi il JavaScript filtra le righe; con Invio il filtro passa al server (?q=) -->
+<form class="strumenti" role="search" action="{{ url_for('dashboard') }}" method="GET">
+  <div class="ricerca">
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+      <circle cx="9" cy="9" r="6"/><path d="M14 14l4 4"/>
+    </svg>
+    <input type="search" id="q" name="q" value="{{ q }}" maxlength="{{ max_ricerca }}"
+           placeholder="Cerca per cliente, prodotto, categoria, data o prezzo"
+           aria-label="Cerca nelle vendite" data-filtro-righe>
+  </div>
+  <button type="submit" class="btn btn-primario">Cerca</button>
+  {% if q %}<a class="btn btn-tenue" href="{{ url_for('dashboard') }}">Azzera</a>{% endif %}
+  <p class="conteggio" aria-live="polite" data-totale="{{ totale }}">
+    <span id="conteggio">{% if q %}{{ righe|length }} di {{ totale }}{% else %}{{ totale }}{% endif %}</span>
+    {{ 'vendita' if totale == 1 else 'vendite' }}
+  </p>
+</form>
+
+<div class="tabella stack">
+  {% if righe %}
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Cliente</th>
+          <th scope="col">Prodotto</th>
+          <th scope="col">Data acquisto</th>
+          <th scope="col" class="num">Prezzo vendita</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in righe %}
+          <tr data-testo="{{ r.testo_ricerca }}">
+            <td class="cliente-c">
+              <div class="cliente">
+                <span class="avatar" style="--t: {{ r.tinta }}" aria-hidden="true">{{ r.iniziale }}</span>
+                <div><strong>{{ r.nome }}</strong><small>{{ r.id_cliente }}</small></div>
+              </div>
+            </td>
+            <td class="prodotto">
+              <div class="prodotto-cella">
+                {% if r.ha_immagine %}
+                  <img class="miniatura" src="{{ url_for('prodotto_immagine', id=r.id_prodotto) }}" alt="" loading="lazy" width="42" height="42">
+                {% endif %}
+                <div>{{ r.prodotto }}{% if r.categorie %}<small>{{ r.categorie }}</small>{% endif %}</div>
+              </div>
+            </td>
+            <td class="data">{{ r.data_acquisto }}</td>
+            <td class="num">{{ (r.prezzo ~ ' €') if r.prezzo_valore is not none else 'n/d' }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="vuoto" id="nessun-risultato" hidden>
+      <h2>Nessuna vendita trovata</h2>
+      <p>Prova con un nome, un prodotto, una categoria, una data (14/10) o un prezzo.</p>
+    </div>
+  {% else %}
+    <div class="vuoto">
+      <h2>Nessuna vendita trovata</h2>
+      <p>{% if q %}Non ci sono risultati per «{{ q }}». Prova con un nome, un prodotto, una categoria, una data (14/10) o un prezzo.{% else %}Non ci sono ancora vendite registrate.{% endif %}</p>
+      {% if q %}<a class="btn btn-primario" href="{{ url_for('dashboard') }}">Azzera la ricerca</a>{% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

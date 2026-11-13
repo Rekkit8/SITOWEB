@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="it" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
+  <title>{{ titolo }}</title>
+  <!-- I font web si caricano solo in alcuni programmi di posta (Apple Mail, iPhone, Outlook per Mac).
+       Gli altri, Gmail compreso, usano i font di riserva indicati in ogni font-family. -->
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    @media only screen and (max-width: 600px) {
+      .contenitore { width: 100% !important; }
+      .padding { padding-left: 24px !important; padding-right: 24px !important; }
+      .titolo { font-size: 26px !important; }
+    }
+  </style>
+</head>
+<body style="margin:0; padding:0; background-color:#edf0f5;" bgcolor="#edf0f5">
+
+  <!-- Anteprima mostrata dai programmi di posta accanto all'oggetto -->
+  <div style="display:none; max-height:0; overflow:hidden; opacity:0; color:#edf0f5; font-size:1px; line-height:1px;">
+    {{ titolo }} - Registro vendite
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#edf0f5" style="background-color:#edf0f5;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <table role="presentation" class="contenitore" width="560" cellpadding="0" cellspacing="0" border="0" style="width:560px; max-width:560px;">
+
+          <!-- Testata blu notte con logo e nome -->
+          <tr>
+            <td class="padding" bgcolor="#16233b" style="background-color:#16233b; padding:26px 40px; border-radius:14px 14px 0 0;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td valign="middle" style="padding-right:12px;">
+                    <img src="cid:logo-registro" width="36" height="36" alt="" style="display:block; width:36px; height:36px; border:0;">
+                  </td>
+                  <td valign="middle" style="font-family:'Bricolage Grotesque','Segoe UI',Helvetica,Arial,sans-serif; font-size:22px; font-weight:700; letter-spacing:-0.4px; color:#ffffff;">
+                    Registro vendite
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Filo arancio -->
+          <tr><td height="4" bgcolor="#f25c2a" style="height:4px; line-height:4px; font-size:0; background-color:#f25c2a;">&nbsp;</td></tr>
+
+          <!-- Corpo -->
+          <tr>
+            <td class="padding" bgcolor="#ffffff" style="background-color:#ffffff; padding:40px 40px 36px; border-left:1px solid #d9dee8; border-right:1px solid #d9dee8;">
+              <h1 class="titolo" style="margin:0 0 20px; font-family:'Bricolage Grotesque','Segoe UI',Helvetica,Arial,sans-serif; font-size:30px; line-height:1.15; font-weight:800; letter-spacing:-0.8px; color:#16233b;">
+                {{ titolo }}
+              </h1>
+              <p style="margin:0 0 14px; font-family:'Instrument Sans','Segoe UI',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#16233b;">
+                Ciao {{ nome }},
+              </p>
+              <p style="margin:0 0 28px; font-family:'Instrument Sans','Segoe UI',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#16233b;">
+                {{ intro }}
+              </p>
+
+              <!-- Pulsante (tabella, così si vede bene anche in Outlook) -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px;">
+                <tr>
+                  <td align="center" bgcolor="#cf3f12" style="background-color:#cf3f12; border-radius:10px;">
+                    <a href="{{ link }}" target="_blank" style="display:inline-block; padding:15px 32px; font-family:'Instrument Sans','Segoe UI',Helvetica,Arial,sans-serif; font-size:16px; font-weight:600; color:#ffffff; text-decoration:none; border-radius:10px;">
+                      {{ pulsante }}
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 6px; font-family:'Instrument Sans','Segoe UI',Helvetica,Arial,sans-serif; font-size:14px; line-height:1.5; color:#5b6880;">
+                Il link è valido per {{ scadenza }} minuti.
+              </p>
+              <p style="margin:0; font-family:'Instrument Sans','Segoe UI',Helvetica,Arial,sans-serif; font-size:14px; line-height:1.5; color:#5b6880;">
+                Se il pulsante non funziona, copia questo indirizzo nel browser:<br>
+                <a href="{{ link }}" target="_blank" style="color:#5b6880; word-break:break-all;">{{ link }}</a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Piede -->
+          <tr>
+            <td class="padding" bgcolor="#f6f8fb" style="background-color:#f6f8fb; padding:22px 40px; border:1px solid #d9dee8; border-radius:0 0 14px 14px;">
+              <p style="margin:0; font-family:'Instrument Sans','Segoe UI',Helvetica,Arial,sans-serif; font-size:13px; line-height:1.5; color:#5b6880;">
+                {{ piede }}
+              </p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

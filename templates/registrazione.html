@@ -1,0 +1,75 @@
+{% extends "app.html" %}
+{% from "_componenti.html" import avviso_errori %}
+{% block titolo %}Registrazione – Registro vendite{% endblock %}
+{% block contenuto %}
+<section class="scheda-form">
+  <h1>Crea il tuo account</h1>
+  <p class="sottotitolo">Dopo la registrazione ti inviamo una email: l'account si attiva aprendo il link che contiene.</p>
+
+  {{ avviso_errori(errori) }}
+
+  <form action="{{ url_for('registrazione') }}" method="POST" class="griglia" autocomplete="off">
+    <div class="campo">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" value="{{ v.nome }}" maxlength="100" required>
+    </div>
+
+    <div class="campo">
+      <label for="data_nascita">Data di nascita</label>
+      <input type="date" id="data_nascita" name="data_nascita" value="{{ v.data_nascita }}" required>
+    </div>
+
+    <div class="campo intera">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" value="{{ v.email }}" placeholder="nome@esempio.it" maxlength="255" required>
+    </div>
+
+    <div class="campo">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" minlength="8" autocomplete="new-password" required>
+      <span class="nota-campo">Almeno 8 caratteri.</span>
+    </div>
+
+    <div class="campo">
+      <label for="password2">Ripeti la password</label>
+      <input type="password" id="password2" name="password2" minlength="8" autocomplete="new-password" required>
+      <span class="nota-campo" id="esito-password" aria-live="polite"></span>
+    </div>
+
+    <div class="campo intera">
+      <label for="telefono">Numero di telefono</label>
+      <div class="telefono">
+        <select name="prefisso" aria-label="Prefisso internazionale" required>
+          {% set ns = namespace(scelto=false) %}
+          {% for paese, prefisso in prefissi %}
+            {% set sel = (not ns.scelto) and ((v.prefisso == prefisso) if v.prefisso else (paese == 'Italia')) %}
+            {% if sel %}{% set ns.scelto = true %}{% endif %}
+            <option value="{{ prefisso }}" {{ 'selected' if sel }}>{{ paese }} ({{ prefisso }})</option>
+          {% endfor %}
+        </select>
+        <input type="tel" id="telefono" name="telefono" value="{{ v.telefono }}" inputmode="numeric"
+               pattern="[0-9 ]{6,15}" placeholder="3331234567" required>
+      </div>
+    </div>
+
+    <fieldset class="intera">
+      <legend>Genere</legend>
+      <div class="segmenti">
+        <label class="segmento"><input type="radio" name="genere" value="uomo" {{ 'checked' if v.genere == 'uomo' }} required><span>Uomo</span></label>
+        <label class="segmento"><input type="radio" name="genere" value="donna" {{ 'checked' if v.genere == 'donna' }}><span>Donna</span></label>
+        <label class="segmento"><input type="radio" name="genere" value="altro" {{ 'checked' if v.genere == 'altro' }}><span>Altro</span></label>
+      </div>
+    </fieldset>
+
+    <label class="interruttore intera">
+      <input type="checkbox" name="newsletter" value="si" {{ 'checked' if v.newsletter }}>
+      Voglio iscrivermi alla newsletter
+    </label>
+
+    <div class="azioni-form intera">
+      <button type="submit" class="btn btn-primario">Crea account</button>
+      <a class="btn btn-tenue" href="{{ url_for('login_page') }}">Ho già un account</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

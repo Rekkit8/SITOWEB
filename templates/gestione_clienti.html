@@ -1,0 +1,35 @@
+{% extends "gestione.html" %}
+{% block titolo %}Gestione clienti – Registro vendite{% endblock %}
+{% block sezione %}
+<div class="testata-sezione">
+  <h2>Clienti ({{ righe|length }})</h2>
+  <a class="btn btn-primario" href="{{ url_for('cliente_salva') }}">Nuovo cliente</a>
+</div>
+<div class="tabella scorri">
+  {% if righe %}
+  <table>
+    <thead><tr>
+      <th scope="col">Id</th><th scope="col">Nome</th>
+      <th scope="col" class="num">Vendite</th><th scope="col"><span class="visually-hidden">Azioni</span></th>
+    </tr></thead>
+    <tbody>
+      {% for r in righe %}
+      <tr>
+        <td>{{ r.id_cliente }}</td>
+        <td>{{ r.nome }}</td>
+        <td class="num">{{ r.n_vendite }}</td>
+        <td class="azioni">
+          <a class="btn btn-tenue btn-piccolo" href="{{ url_for('cliente_salva', id_cliente=r.id_cliente) }}">Modifica</a>
+          <form class="in-linea" method="POST" action="{{ url_for('cliente_elimina', id_cliente=r.id_cliente) }}" data-conferma="Eliminare il cliente {{ r.nome }}?">
+            <button class="btn btn-pericolo btn-piccolo">Elimina</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="vuoto"><h2>Nessun cliente</h2><p>Aggiungi il primo cliente.</p></div>
+  {% endif %}
+</div>
+{% endblock %}

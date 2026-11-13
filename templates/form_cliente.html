@@ -1,0 +1,20 @@
+{% extends "gestione.html" %}
+{% from "_componenti.html" import avviso_errori %}
+{% block titolo %}{{ 'Modifica' if modifica else 'Nuovo' }} cliente – Registro vendite{% endblock %}
+{% block sezione %}
+<section class="scheda-form">
+  <h1>{{ 'Modifica cliente' if modifica else 'Nuovo cliente' }}</h1>
+  <p class="sottotitolo">{% if modifica %}Codice cliente: {{ c.id_cliente }}.{% else %}Il codice cliente (CL001, CL002…) viene assegnato in automatico.{% endif %}</p>
+  {{ avviso_errori(errori) }}
+  <form method="POST" class="griglia">
+    <div class="campo intera">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" value="{{ c.nome }}" maxlength="100" required autofocus>
+    </div>
+    <div class="azioni-form intera">
+      <button type="submit" class="btn btn-primario">Salva cliente</button>
+      <a class="btn btn-tenue" href="{{ url_for('gestione_clienti') }}">Annulla</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

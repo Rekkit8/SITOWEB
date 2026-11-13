@@ -1,0 +1,13 @@
+{% extends "app.html" %}
+{% block contenuto %}
+<div class="gestione-testa">
+  <h1>Gestione</h1>
+  <nav class="schede" aria-label="Sezioni di gestione">
+    <a class="scheda" href="{{ url_for('gestione_vendite') }}"{% if pagina == 'gestione-vendite' %} aria-current="page"{% endif %}>Vendite</a>
+    <a class="scheda" href="{{ url_for('gestione_prodotti') }}"{% if pagina == 'gestione-prodotti' %} aria-current="page"{% endif %}>Prodotti</a>
+    <a class="scheda" href="{{ url_for('gestione_clienti') }}"{% if pagina == 'gestione-clienti' %} aria-current="page"{% endif %}>Clienti</a>
+    <a class="scheda" href="{{ url_for('gestione_utenti') }}"{% if pagina == 'gestione-utenti' %} aria-current="page"{% endif %}>Utenti</a>
+  </nav>
+</div>
+{% block sezione %}{% endblock %}
+{% endblock %}

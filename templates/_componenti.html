@@ -1,0 +1,14 @@
+{# Elenco di errori di validazione, riusato da tutti i form #}
+{% macro avviso_errori(errori) %}
+  {% if errori %}
+    <div class="avviso" role="alert">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <circle cx="10" cy="10" r="8"/><path d="M10 6v5"/><circle cx="10" cy="14" r=".6" fill="currentColor"/>
+      </svg>
+      <div>
+        <strong>Controlla questi campi</strong>
+        <ul>{% for e in errori %}<li>{{ e }}</li>{% endfor %}</ul>
+      </div>
+    </div>
+  {% endif %}
+{% endmacro %}

@@ -1,0 +1,53 @@
+{% extends "gestione.html" %}
+{% from "_componenti.html" import avviso_errori %}
+{% block titolo %}{{ 'Modifica' if modifica else 'Nuovo' }} prodotto – Registro vendite{% endblock %}
+{% block sezione %}
+<section class="scheda-form">
+  <h1>{{ 'Modifica prodotto' if modifica else 'Nuovo prodotto' }}</h1>
+  <p class="sottotitolo">L'immagine viene salvata direttamente nel database (JPG, PNG o WebP, massimo 2 MB).</p>
+  {{ avviso_errori(errori) }}
+  <form method="POST" enctype="multipart/form-data" class="griglia">
+    <div class="campo intera">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" value="{{ p.nome }}" maxlength="100" required>
+    </div>
+
+    <fieldset class="intera">
+      <legend>Categorie</legend>
+      <div class="chips">
+        {% for c in categorie %}
+          <label class="chip"><input type="checkbox" name="categorie" value="{{ c.id }}" {{ 'checked' if c.id in selezionate }}><span>{{ c.nome }}</span></label>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    <div class="campo intera">
+      <label for="nuova_categoria">Nuova categoria (facoltativa)</label>
+      <input type="text" id="nuova_categoria" name="nuova_categoria" maxlength="50" placeholder="Es. Rete">
+    </div>
+
+    <div class="campo intera">
+      <label for="immagine">Immagine</label>
+      <div class="anteprima">
+        {% if p.ha_immagine and modifica %}
+          <img id="anteprima" src="{{ url_for('prodotto_immagine', id=request.view_args.id) }}" alt="Immagine attuale del prodotto">
+        {% else %}
+          <img id="anteprima" alt="Anteprima dell'immagine scelta" hidden>
+        {% endif %}
+        <input type="file" id="immagine" name="immagine" accept="image/jpeg,image/png,image/webp" data-anteprima="anteprima" data-max-byte="2097152">
+      </div>
+      <span class="nota-campo" id="esito-immagine" aria-live="polite"></span>
+      {% if p.ha_immagine and modifica %}
+        <label class="interruttore">
+          <input type="checkbox" name="rimuovi_immagine" value="si"> Rimuovi l'immagine attuale
+        </label>
+      {% endif %}
+    </div>
+
+    <div class="azioni-form intera">
+      <button type="submit" class="btn btn-primario">Salva prodotto</button>
+      <a class="btn btn-tenue" href="{{ url_for('gestione_prodotti') }}">Annulla</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

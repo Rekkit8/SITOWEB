@@ -1,0 +1,40 @@
+{% extends "gestione.html" %}
+{% from "_componenti.html" import avviso_errori %}
+{% block titolo %}{{ 'Modifica' if modifica else 'Nuova' }} vendita – Registro vendite{% endblock %}
+{% block sezione %}
+<section class="scheda-form">
+  <h1>{{ 'Modifica vendita' if modifica else 'Nuova vendita' }}</h1>
+  <p class="sottotitolo">Tutti i campi sono obbligatori.</p>
+  {{ avviso_errori(errori) }}
+  <form method="POST" class="griglia">
+    <div class="campo">
+      <label for="id_cliente">Cliente</label>
+      <select id="id_cliente" name="id_cliente" required>
+        {% for c in clienti %}
+          <option value="{{ c.id_cliente }}" {{ 'selected' if c.id_cliente == v.id_cliente }}>{{ c.nome }} ({{ c.id_cliente }})</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="campo">
+      <label for="id_prodotto">Prodotto</label>
+      <select id="id_prodotto" name="id_prodotto" required>
+        {% for p in prodotti %}
+          <option value="{{ p.id }}" {{ 'selected' if p.id|string == v.id_prodotto|string }}>{{ p.nome }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="campo">
+      <label for="prezzo_vendita">Prezzo (€)</label>
+      <input type="number" id="prezzo_vendita" name="prezzo_vendita" step="0.01" min="0.01" value="{{ v.prezzo_vendita }}" required>
+    </div>
+    <div class="campo">
+      <label for="data_acquisto">Data acquisto</label>
+      <input type="date" id="data_acquisto" name="data_acquisto" value="{{ v.data_acquisto }}" required>
+    </div>
+    <div class="azioni-form intera">
+      <button type="submit" class="btn btn-primario">Salva vendita</button>
+      <a class="btn btn-tenue" href="{{ url_for('gestione_vendite') }}">Annulla</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

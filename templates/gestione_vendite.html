@@ -1,0 +1,36 @@
+{% extends "gestione.html" %}
+{% block titolo %}Gestione vendite – Registro vendite{% endblock %}
+{% block sezione %}
+<div class="testata-sezione">
+  <h2>Vendite ({{ righe|length }})</h2>
+  <a class="btn btn-primario" href="{{ url_for('vendita_salva') }}">Nuova vendita</a>
+</div>
+<div class="tabella scorri">
+  {% if righe %}
+  <table>
+    <thead><tr>
+      <th scope="col">Cliente</th><th scope="col">Prodotto</th><th scope="col">Data</th>
+      <th scope="col" class="num">Prezzo</th><th scope="col"><span class="visually-hidden">Azioni</span></th>
+    </tr></thead>
+    <tbody>
+      {% for r in righe %}
+      <tr>
+        <td>{{ r.nome }} <small>({{ r.id_cliente }})</small></td>
+        <td>{{ r.prodotto }}</td>
+        <td class="data">{{ r.data_acquisto }}</td>
+        <td class="num">{{ (r.prezzo ~ ' €') if r.prezzo_valore is not none else 'n/d' }}</td>
+        <td class="azioni">
+          <a class="btn btn-tenue btn-piccolo" href="{{ url_for('vendita_salva', id=r.id) }}">Modifica</a>
+          <form class="in-linea" method="POST" action="{{ url_for('vendita_elimina', id=r.id) }}" data-conferma="Eliminare la vendita di {{ r.nome }}?">
+            <button class="btn btn-pericolo btn-piccolo">Elimina</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="vuoto"><h2>Nessuna vendita</h2><p>Aggiungi la prima vendita.</p></div>
+  {% endif %}
+</div>
+{% endblock %}

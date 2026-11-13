@@ -1,0 +1,35 @@
+{% extends "gestione.html" %}
+{% block titolo %}Gestione utenti – Registro vendite{% endblock %}
+{% block sezione %}
+<div class="testata-sezione">
+  <h2>Utenti ({{ righe|length }})</h2>
+  <a class="btn btn-primario" href="{{ url_for('utente_salva') }}">Nuovo utente</a>
+</div>
+<div class="tabella scorri">
+  <table>
+    <thead><tr>
+      <th scope="col">Nome</th><th scope="col">Email</th><th scope="col">Ruolo</th>
+      <th scope="col">Stato</th><th scope="col">Telefono</th><th scope="col"><span class="visually-hidden">Azioni</span></th>
+    </tr></thead>
+    <tbody>
+      {% for r in righe %}
+      <tr>
+        <td>{{ r.nome }}{% if r.id == utente.id %} <small>(tu)</small>{% endif %}</td>
+        <td>{{ r.email }}</td>
+        <td><span class="badge {{ r.ruolo }}">{{ r.ruolo }}</span></td>
+        <td>{% if r.attivo %}<span class="badge attivo">attivo</span>{% else %}<span class="badge spento">da confermare</span>{% endif %}</td>
+        <td>{{ r.telefono or '–' }}</td>
+        <td class="azioni">
+          <a class="btn btn-tenue btn-piccolo" href="{{ url_for('utente_salva', id=r.id) }}">Modifica</a>
+          {% if r.id != utente.id %}
+          <form class="in-linea" method="POST" action="{{ url_for('utente_elimina', id=r.id) }}" data-conferma="Eliminare l'utente {{ r.nome }}?">
+            <button class="btn btn-pericolo btn-piccolo">Elimina</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

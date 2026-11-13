@@ -1,0 +1,43 @@
+{% extends "gestione.html" %}
+{% from "_componenti.html" import avviso_errori %}
+{% block titolo %}{{ 'Modifica' if modifica else 'Nuovo' }} utente – Registro vendite{% endblock %}
+{% block sezione %}
+<section class="scheda-form">
+  <h1>{{ 'Modifica utente' if modifica else 'Nuovo utente' }}</h1>
+  <p class="sottotitolo">{% if modifica %}Lascia vuota la password per non cambiarla.{% else %}L'utente creato da un gestore è subito attivo, senza email di conferma.{% endif %}</p>
+  {{ avviso_errori(errori) }}
+  <form method="POST" class="griglia" autocomplete="off">
+    <div class="campo">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" value="{{ u.nome }}" maxlength="100" required>
+    </div>
+    <div class="campo">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" value="{{ u.email }}" maxlength="255" required>
+    </div>
+    <div class="campo intera">
+      <label for="password">{{ 'Nuova password' if modifica else 'Password' }}</label>
+      <input type="password" id="password" name="password" minlength="8" autocomplete="new-password" {{ '' if modifica else 'required' }}>
+    </div>
+
+    <fieldset class="intera">
+      <legend>Ruolo</legend>
+      <div class="segmenti">
+        <label class="segmento"><input type="radio" name="ruolo" value="base" {{ 'checked' if u.ruolo == 'base' }} {{ 'disabled' if se_stesso }}><span>Base (solo lettura)</span></label>
+        <label class="segmento"><input type="radio" name="ruolo" value="gestore" {{ 'checked' if u.ruolo == 'gestore' }} {{ 'disabled' if se_stesso }}><span>Gestore (CRUD)</span></label>
+      </div>
+    </fieldset>
+
+    <label class="interruttore intera">
+      <input type="checkbox" name="attivo" value="si" {{ 'checked' if u.attivo }} {{ 'disabled' if se_stesso }}>
+      Account attivo
+    </label>
+    {% if se_stesso %}<p class="nota intera">Stai modificando il tuo account: ruolo e stato non si possono cambiare da qui.</p>{% endif %}
+
+    <div class="azioni-form intera">
+      <button type="submit" class="btn btn-primario">Salva utente</button>
+      <a class="btn btn-tenue" href="{{ url_for('gestione_utenti') }}">Annulla</a>
+    </div>
+  </form>
+</section>
+{% endblock %}
